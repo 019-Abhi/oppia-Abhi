@@ -35,6 +35,7 @@ import shutil
 import subprocess
 import sys
 import tarfile
+import importlib
 
 from scripts import (
     install_python_dev_dependencies,  # pylint: disable=wrong-import-position, wrong-import-order
@@ -54,6 +55,41 @@ TMP_UNZIP_PATH: Final = os.path.join('.', 'tmp_unzip.zip')
 _PARSER: Final = argparse.ArgumentParser(
     description='Installation script for Oppia third-party libraries.'
 )
+
+_REQUIRED_RUNTIME_MODULES = [
+    'psutil',
+    'certifi',
+    'packaging',
+    'rcssmin',
+    'xmltodict',
+    'yaml',
+]
+
+
+def install_missing_runtime_python_modules() -> None:
+    """Installs required runtime Python modules if they are missing.
+
+    This is necessary for fresh installations where runtime dependencies
+    are not yet available but are imported during startup.
+    """
+    missing_modules = []
+    for module in _REQUIRED_RUNTIME_MODULES:
+        try:
+            importlib.import_module(module)
+        except ImportError:
+            missing_modules.append(module)
+
+    if not missing_modules:
+        print('All required runtime Python modules are already installed.')
+        return
+
+    print(
+        'Installing missing runtime Python modules: %s'
+        % ', '.join(missing_modules)
+    )
+    subprocess.check_call(
+        [sys.executable, '-m', 'pip', 'install', *missing_modules]
+    )
 
 
 def make_google_module_importable_by_python(google_module_path: str) -> None:
@@ -434,6 +470,10 @@ def main() -> None:
     # This ensures dev dependencies are present and compiled before we
     # proceed to other setup tasks that require them.
     install_python_dev_dependencies.main(['--assert_compiled'])
+
+    # Ensure required runtime Python modules are present for fresh installs.
+    install_missing_runtime_python_modules()
+
     # Import the hook scripts here (after dev deps are installed) so that
     # they are only loaded when running the installer.
     from . import pre_commit_hook  # pylint: disable=wrong-import-position
