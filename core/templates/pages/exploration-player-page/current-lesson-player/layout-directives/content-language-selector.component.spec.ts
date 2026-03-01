@@ -207,7 +207,6 @@ describe('Content language selector component', () => {
       title: 'My Title',
       init_state_name: 'Introduction',
       language_code: 'en',
-      auto_tts_enabled: false,
       states: {},
       param_specs: {},
       param_changes: [],
@@ -228,7 +227,6 @@ describe('Content language selector component', () => {
         init_state_name: 'Introduction',
         param_specs: {},
         param_changes: [],
-        auto_tts_enabled: false,
         edits_allowed: true,
       },
     };

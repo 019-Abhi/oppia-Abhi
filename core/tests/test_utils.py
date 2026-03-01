@@ -2582,7 +2582,6 @@ class GenericTestBase(AppEngineTestBase):
     SAMPLE_YAML_CONTENT: str = (
         (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: Category
 edits_allowed: true

@@ -285,9 +285,6 @@ export class ExplorationEditorPageComponent implements OnInit, OnDestroy {
       this.explorationParamChangesService.init(
         ParamChanges.createFromBackendList(explorationData.param_changes)
       );
-      this.explorationAutomaticTextToSpeechService.init(
-        explorationData.auto_tts_enabled
-      );
       this.explorationNextContentIdIndexService.init(
         explorationData.next_content_id_index
       );

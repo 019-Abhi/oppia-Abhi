@@ -3846,7 +3846,6 @@ class ExplorationDomainUnitTests(test_utils.GenericTestBase):
             'init_state_name': exploration.init_state_name,
             'param_specs': {},
             'param_changes': [],
-            'auto_tts_enabled': exploration.auto_tts_enabled,
             'edits_allowed': exploration.edits_allowed,
         }
 
@@ -4172,22 +4171,6 @@ class ExplorationDomainUnitTests(test_utils.GenericTestBase):
     # TODO(#13059): Here we use MyPy ignore because after we fully type
     # the codebase we plan to get rid of the tests that intentionally test
     # wrong inputs that we can normally catch by typing.
-    def test_validate_exploration_auto_tts_enabled(self) -> None:
-        exploration = self.save_new_valid_exploration(
-            'exp_id',
-            'user@example.com',
-            title='',
-            category='',
-            objective='',
-            end_state_name='End',
-        )
-        exploration.validate()
-
-        exploration.auto_tts_enabled = 1  # type: ignore[assignment]
-        with self.assertRaisesRegex(
-            Exception, 'Expected auto_tts_enabled to be a bool, received 1'
-        ):
-            exploration.validate()
 
     # TODO(#13059): Here we use MyPy ignore because after we fully type
     # the codebase we plan to get rid of the tests that intentionally test
@@ -4581,7 +4564,6 @@ class ExplorationDomainUnitTests(test_utils.GenericTestBase):
             {},
             [],
             0,
-            feconf.DEFAULT_AUTO_TTS_ENABLED,
             content_id_generator.next_content_id_index,
             True,
         )
@@ -4636,7 +4618,6 @@ class ExplorationDomainUnitTests(test_utils.GenericTestBase):
         """
         old_version_yaml_content: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: Category
 edits_allowed: true
@@ -5379,7 +5360,6 @@ class YamlCreationUnitTests(test_utils.GenericTestBase):
     SAMPLE_YAML_CONTENT: str = (
         (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: Category
 edits_allowed: true
@@ -5462,7 +5442,6 @@ version: 0
 
     YAML_CONTENT_INVALID_SCHEMA_VERSION: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -5728,7 +5707,6 @@ class SchemaMigrationUnitTests(test_utils.GenericTestBase):
 
     YAML_CONTENT_V46: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -5873,7 +5851,6 @@ title: Title
 
     YAML_CONTENT_V47: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -6018,7 +5995,6 @@ title: Title
 
     YAML_CONTENT_V48: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -6163,7 +6139,6 @@ title: Title
 
     YAML_CONTENT_V49: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -6310,7 +6285,6 @@ title: Title
 
     YAML_CONTENT_V50: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -6460,7 +6434,6 @@ title: Title
 
     YAML_CONTENT_V51: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -6610,7 +6583,6 @@ title: Title
 
     YAML_CONTENT_V52: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -6760,7 +6732,6 @@ title: Title
 
     YAML_CONTENT_V53: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -6910,7 +6881,6 @@ title: Title
 
     YAML_CONTENT_V54: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -7049,7 +7019,6 @@ title: Title
 
     YAML_CONTENT_V55: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 init_state_name: (untitled state)
@@ -7187,7 +7156,6 @@ title: Title
 
     YAML_CONTENT_V56: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 init_state_name: (untitled state)
@@ -7332,7 +7300,6 @@ title: Title
 
     YAML_CONTENT_V58: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 init_state_name: (untitled state)
@@ -7479,7 +7446,6 @@ title: Title
 
     YAML_CONTENT_V59: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 init_state_name: (untitled state)
@@ -7626,7 +7592,6 @@ title: Title
 
     YAML_CONTENT_V61: Final = (
         """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 init_state_name: (untitled state)
@@ -7768,7 +7733,6 @@ title: Title
         """Tests the migration of ItemSelectionInput rule inputs."""
         sample_yaml_content: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: Category
 edits_allowed: true
@@ -7887,7 +7851,6 @@ title: Title
 
         latest_sample_yaml_content: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: Category
 edits_allowed: true
@@ -7999,7 +7962,6 @@ version: 0
         """Tests the migration of DragAndDropSortInput rule inputs."""
         sample_yaml_content: str = (
             """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -8128,7 +8090,6 @@ title: Title
 
         latest_sample_yaml_content: str = (
             """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -8249,7 +8210,6 @@ version: 0
         """Tests the migration of unicode written translations rule inputs."""
         sample_yaml_content: str = (
             """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -8340,7 +8300,6 @@ title: Title
 
         latest_sample_yaml_content: str = (
             """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -8423,7 +8382,6 @@ version: 0
 
         sample_yaml_content_for_lab_as_correct: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -8531,7 +8489,6 @@ title: ''
 
         latest_sample_yaml_content_for_lab_as_correct: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -8629,7 +8586,6 @@ version: 0
         # pylint: disable=line-too-long
         sample_yaml_content_for_rte: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -8782,7 +8738,6 @@ title: ''
         # pylint: disable=anomalous-backslash-in-string
         latest_sample_yaml_content_for_rte: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -8912,7 +8867,6 @@ version: 0
         # pylint: disable=line-too-long
         sample_yaml_content_for_cont_and_end_interac_1: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -9020,7 +8974,6 @@ title: ''
         # pylint: disable=line-too-long
         latest_sample_yaml_content_for_cont_and_end_interac_1: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -9108,7 +9061,6 @@ version: 0
 
         sample_yaml_content_for_cont_and_end_interac_2: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -9198,7 +9150,6 @@ title: ''
 
         latest_sample_yaml_content_for_cont_and_end_interac_2: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -9288,7 +9239,6 @@ version: 0
         # pylint: disable=line-too-long
         sample_yaml_content_for_numeric_interac: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -9587,7 +9537,6 @@ title: ''
         # pylint: disable=line-too-long
         latest_sample_yaml_content_for_numeric_interac: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -9746,7 +9695,6 @@ version: 0
 
         sample_yaml_content_for_fraction_interac: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -9997,7 +9945,6 @@ title: ''
 
         latest_sample_yaml_content_for_fraction_interac: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -10159,7 +10106,6 @@ version: 0
 
         sample_yaml_content_for_fraction_interac_2: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -10286,7 +10232,6 @@ title: ''
 
         latest_sample_yaml_content_for_fraction_interac_2: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -10399,7 +10344,6 @@ version: 0
 
         sample_yaml_content_for_multiple_choice_interac: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -10572,7 +10516,6 @@ title: ''
 
         latest_sample_yaml_content_for_multiple_choice_interac: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -10699,7 +10642,6 @@ version: 0
         # pylint: disable=line-too-long
         sample_yaml_content_for_item_selection_interac_1: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -10865,7 +10807,6 @@ title: ''
         # pylint: disable=line-too-long
         latest_sample_yaml_content_for_item_selection_interac_1: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -11008,7 +10949,6 @@ version: 0
 
         sample_yaml_content_for_item_selection_interac_2: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -11207,7 +11147,6 @@ version: 0
 
         latest_sample_yaml_content_for_item_selection_interac_2: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -11320,7 +11259,6 @@ version: 0
 
         sample_yaml_content_for_item_selection_interac_3: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -11462,7 +11400,6 @@ version: 0
 
         latest_sample_yaml_content_for_item_selection_interac_3: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -11570,7 +11507,6 @@ version: 0
 
         sample_yaml_content_for_item_selection_interac_4: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -11684,7 +11620,6 @@ version: 0
 
         latest_sample_yaml_content_for_item_selection_interac_4: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -11794,7 +11729,6 @@ version: 0
 
         sample_yaml_content_for_drag_and_drop_interac_1: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -12017,7 +11951,6 @@ title: ''
 
         latest_sample_yaml_content_for_drag_and_drop_interac_1: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -12145,7 +12078,6 @@ version: 0
 
         sample_yaml_content_for_drag_and_drop_interac_2: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -12292,7 +12224,6 @@ title: ''
 
         latest_sample_yaml_content_for_drag_and_drop_interac_2: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -12418,7 +12349,6 @@ version: 0
 
         sample_yaml_content_for_drag_and_drop_interac_3: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -12571,7 +12501,6 @@ version: 0
 
         latest_sample_yaml_content_for_drag_and_drop_interac_3: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -12689,7 +12618,6 @@ version: 0
         """
         sample_yaml_content_for_text_interac_1: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -12964,7 +12892,6 @@ title: ''
 
         latest_sample_yaml_content_for_text_interac_1: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -13149,7 +13076,6 @@ version: 0
 
         sample_yaml_content_for_text_interac_2: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -13261,7 +13187,6 @@ title: ''
 
         latest_sample_yaml_content_for_text_interac_2: str = (
             """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: ''
 edits_allowed: true
@@ -17931,14 +17856,6 @@ class ExplorationChangesMergeabilityUnitTests(
             ),
             exp_domain.ExplorationChange(
                 {
-                    'property_name': 'auto_tts_enabled',
-                    'cmd': 'edit_exploration_property',
-                    'old_value': True,
-                    'new_value': False,
-                }
-            ),
-            exp_domain.ExplorationChange(
-                {
                     'property_name': 'tags',
                     'cmd': 'edit_exploration_property',
                     'old_value': ['old_value'],
@@ -17987,13 +17904,6 @@ class ExplorationChangesMergeabilityUnitTests(
                     'cmd': 'edit_exploration_property',
                     'property_name': 'init_state_name',
                     'new_value': 'Introduction',
-                }
-            ),
-            exp_domain.ExplorationChange(
-                {
-                    'cmd': 'edit_exploration_property',
-                    'property_name': 'auto_tts_enabled',
-                    'new_value': False,
                 }
             ),
             exp_domain.ExplorationChange(
@@ -18064,14 +17974,6 @@ class ExplorationChangesMergeabilityUnitTests(
             ),
             exp_domain.ExplorationChange(
                 {
-                    'property_name': 'auto_tts_enabled',
-                    'cmd': 'edit_exploration_property',
-                    'old_value': True,
-                    'new_value': False,
-                }
-            ),
-            exp_domain.ExplorationChange(
-                {
                     'property_name': 'tags',
                     'cmd': 'edit_exploration_property',
                     'old_value': ['old_value'],
@@ -18118,14 +18020,6 @@ class ExplorationChangesMergeabilityUnitTests(
                     'cmd': 'edit_exploration_property',
                     'old_value': 'A category',
                     'new_value': 'A new category',
-                }
-            ),
-            exp_domain.ExplorationChange(
-                {
-                    'property_name': 'auto_tts_enabled',
-                    'cmd': 'edit_exploration_property',
-                    'old_value': True,
-                    'new_value': False,
                 }
             ),
             exp_domain.ExplorationChange(
@@ -19901,7 +19795,6 @@ class ExplorationMetadataDomainUnitTests(test_utils.GenericTestBase):
             exploration.init_state_name,
             exploration.param_specs,
             exploration.param_changes,
-            exploration.auto_tts_enabled,
             exploration.edits_allowed,
         ).to_dict()
         expected_metadata_dict = {
@@ -19931,7 +19824,6 @@ class ExplorationMetadataDomainUnitTests(test_utils.GenericTestBase):
                     {'list_of_values': ['5', '6'], 'parse_with_jinja': True},
                 ).to_dict(),
             ],
-            'auto_tts_enabled': exploration.auto_tts_enabled,
             'edits_allowed': exploration.edits_allowed,
         }
 
@@ -19954,7 +19846,6 @@ class ExplorationMetadataDomainUnitTests(test_utils.GenericTestBase):
                 'init_state_name',
                 'param_specs',
                 'param_changes',
-                'auto_tts_enabled',
                 'edits_allowed',
             ],
         )
@@ -19986,7 +19877,6 @@ class ExplorationMetadataDomainUnitTests(test_utils.GenericTestBase):
                 'init_state_name',
                 'param_specs',
                 'param_changes',
-                'auto_tts_enabled',
                 'edits_allowed',
                 'new_property',
             ],
@@ -20076,7 +19966,6 @@ class OldVersionExploration(translation_domain.BaseTranslatableObject):
     def __init__(self, exploration_id: str, exploration_dict: Dict[str, Any]):
         self.id = exploration_id
         self.author_notes = exploration_dict.get('author_notes', '')
-        self.auto_tts_enabled = exploration_dict.get('auto_tts_enabled', True)
         self.blurb = exploration_dict.get('blurb', '')
         self.category = exploration_dict.get('category', '')
         self.edits_allowed = exploration_dict.get('edits_allowed', True)
@@ -20113,7 +20002,6 @@ class OldVersionExploration(translation_domain.BaseTranslatableObject):
             'param_changes': self.param_changes,
             'param_specs': self.param_specs,
             'tags': self.tags,
-            'auto_tts_enabled': self.auto_tts_enabled,
             'states': {
                 state_name: (
                     state.to_dict() if hasattr(state, 'to_dict') else state

@@ -3383,35 +3383,6 @@ export class ExplorationEditor extends BaseUser {
   }
 
   /**
-   * Enables Automatic Text-to-Speech switch present in settings tab.
-   */
-  async enableAutomaticTextToSpeech(): Promise<void> {
-    await this.expandSettingsTabSection('Advanced Features');
-    await this.page.waitForSelector(textToSpeechToggle, {
-      visible: true,
-    });
-    await this.clickOnElementWithSelector(textToSpeechToggle);
-    await this.expectAutomaticTextToSpeechToBeEnabled();
-  }
-
-  /**
-   * Checks whether the Automatic Text-to-Speech setting is enabled or disabled.
-   */
-  async expectAutomaticTextToSpeechToBeEnabled(): Promise<void> {
-    await this.page.waitForSelector('#text-speech-switch');
-    const autoTtsSwitch = await this.page.$('#text-speech-switch');
-    const autoTtsSwitchIsOn = await this.page.evaluate(
-      switchElement => switchElement.checked,
-      autoTtsSwitch
-    );
-    if (autoTtsSwitchIsOn) {
-      showMessage('Automatic Text-to-Speech is enabled.');
-    } else {
-      throw error('Automatic Text-to-Speech is disabled.');
-    }
-  }
-
-  /**
    * Assigns a role of manager to any guest user.
    */
   async assignUserToManagerRole(username: string): Promise<void> {

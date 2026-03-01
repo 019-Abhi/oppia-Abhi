@@ -364,7 +364,6 @@ class ExplorationChange(change_domain.BaseChange):
         'param_specs',
         'param_changes',
         'init_state_name',
-        'auto_tts_enabled',
         'next_content_id_index',
         'edits_allowed',
     ]
@@ -958,17 +957,6 @@ class EditExplorationPropertyInitStateNameCmd(ExplorationChange):
     old_value: str
 
 
-class EditExplorationPropertyAutoTtsEnabledCmd(ExplorationChange):
-    """Class representing the ExplorationChange's
-    CMD_EDIT_EXPLORATION_PROPERTY command with
-    'auto_tts_enabled' as allowed value.
-    """
-
-    property_name: Literal['auto_tts_enabled']
-    new_value: bool
-    old_value: bool
-
-
 class EditExplorationPropertyNextContentIdIndexCmd(ExplorationChange):
     """Class representing the ExplorationChange's
     CMD_EDIT_EXPLORATION_PROPERTY command with
@@ -1385,7 +1373,6 @@ class ExplorationDict(TypedDict):
     states: Dict[str, state_domain.StateDict]
     param_specs: Dict[str, param_domain.ParamSpecDict]
     param_changes: List[param_domain.ParamChangeDict]
-    auto_tts_enabled: bool
     edits_allowed: bool
     next_content_id_index: int
     version: int
@@ -1409,7 +1396,6 @@ class ExplorationDictForAndroid(TypedDict):
     states: Dict[str, state_domain.StateDictForAndroid]
     param_specs: Dict[str, param_domain.ParamSpecDict]
     param_changes: List[param_domain.ParamChangeDict]
-    auto_tts_enabled: bool
     edits_allowed: bool
     next_content_id_index: int
     version: int
@@ -1490,7 +1476,6 @@ class Exploration(translation_domain.BaseTranslatableObject):
         param_specs_dict: Dict[str, param_domain.ParamSpecDict],
         param_changes_list: List[param_domain.ParamChangeDict],
         version: int,
-        auto_tts_enabled: bool,
         next_content_id_index: int,
         edits_allowed: bool,
         created_on: Optional[datetime.datetime] = None,
@@ -1519,8 +1504,6 @@ class Exploration(translation_domain.BaseTranslatableObject):
             param_changes_list: list(dict). List of dict where each dict is
                 used to initialize a ParamChange domain object.
             version: int. The version of the exploration.
-            auto_tts_enabled: bool. True if automatic text-to-speech is
-                enabled.
             next_content_id_index: int. The next content_id index to use for
                 generation of new content_ids.
             edits_allowed: bool. True when edits to the exploration is allowed.
@@ -1556,7 +1539,6 @@ class Exploration(translation_domain.BaseTranslatableObject):
         self.version = version
         self.created_on = created_on
         self.last_updated = last_updated
-        self.auto_tts_enabled = auto_tts_enabled
         self.next_content_id_index = next_content_id_index
         self.edits_allowed = edits_allowed
 
@@ -1641,7 +1623,6 @@ class Exploration(translation_domain.BaseTranslatableObject):
             {},
             [],
             0,
-            feconf.DEFAULT_AUTO_TTS_ENABLED,
             content_id_generator.next_content_id_index,
             True,
         )
@@ -1684,7 +1665,6 @@ class Exploration(translation_domain.BaseTranslatableObject):
         exploration.tags = exploration_dict['tags']
         exploration.blurb = exploration_dict['blurb']
         exploration.author_notes = exploration_dict['author_notes']
-        exploration.auto_tts_enabled = exploration_dict['auto_tts_enabled']
         exploration.next_content_id_index = exploration_dict[
             'next_content_id_index'
         ]
@@ -1966,12 +1946,6 @@ class Exploration(translation_domain.BaseTranslatableObject):
             raise utils.ValidationError(
                 'Expected param_specs to be a dict, received %s'
                 % self.param_specs
-            )
-
-        if not isinstance(self.auto_tts_enabled, bool):
-            raise utils.ValidationError(
-                'Expected auto_tts_enabled to be a bool, received %s'
-                % self.auto_tts_enabled
             )
 
         if not isinstance(self.next_content_id_index, int):
@@ -2578,15 +2552,6 @@ class Exploration(translation_domain.BaseTranslatableObject):
             self.states[old_init_state_name].card_is_checkpoint = False
         self.init_state.card_is_checkpoint = True
 
-    def update_auto_tts_enabled(self, auto_tts_enabled: bool) -> None:
-        """Update whether automatic text-to-speech is enabled.
-
-        Args:
-            auto_tts_enabled: bool. Whether automatic text-to-speech
-                is enabled or not.
-        """
-        self.auto_tts_enabled = auto_tts_enabled
-
     def update_next_content_id_index(self, next_content_id_index: int) -> None:
         """Update the interaction next content id index attribute.
 
@@ -2720,7 +2685,6 @@ class Exploration(translation_domain.BaseTranslatableObject):
             self.init_state_name,
             self.param_specs,
             self.param_changes,
-            self.auto_tts_enabled,
             self.edits_allowed,
         )
 
@@ -4992,7 +4956,7 @@ class Exploration(translation_domain.BaseTranslatableObject):
                 - If `raw_latex` is not present or empty or None, removes
                 the tag
             - `oppia-noninteractive-video`
-                - If `start-with-value` or `end-with-value` is not present,
+                - If `start-with-value` or `end-with-value` is not present,f
                 introduce them to the tag and assign 0 to them
                 - If `autoplay-with-value` is not present or is not boolean,
                 introduce it to the tag and assign `false` to them
@@ -6116,7 +6080,6 @@ class Exploration(translation_domain.BaseTranslatableObject):
             'param_changes': self.param_change_dicts,
             'param_specs': self.param_specs_dict,
             'tags': self.tags,
-            'auto_tts_enabled': self.auto_tts_enabled,
             'next_content_id_index': self.next_content_id_index,
             'edits_allowed': self.edits_allowed,
             'states': {
@@ -7023,7 +6986,6 @@ class ExplorationMetadataDict(TypedDict):
     init_state_name: str
     param_specs: Dict[str, param_domain.ParamSpecDict]
     param_changes: List[param_domain.ParamChangeDict]
-    auto_tts_enabled: bool
     edits_allowed: bool
 
 
@@ -7043,7 +7005,6 @@ class ExplorationMetadata:
         init_state_name: str,
         param_specs: Dict[str, param_domain.ParamSpec],
         param_changes: List[param_domain.ParamChange],
-        auto_tts_enabled: bool,
         edits_allowed: bool,
     ) -> None:
         """Initializes an ExplorationMetadata domain object.
@@ -7064,8 +7025,6 @@ class ExplorationMetadata:
                 domain object.
             param_changes: list(ParamChange). List of ParamChange domain
                 objects.
-            auto_tts_enabled: bool. True if automatic text-to-speech is
-                enabled.
             edits_allowed: bool. True when edits to the exploration is allowed.
         """
         self.title = title
@@ -7079,7 +7038,6 @@ class ExplorationMetadata:
         self.init_state_name = init_state_name
         self.param_specs = param_specs
         self.param_changes = param_changes
-        self.auto_tts_enabled = auto_tts_enabled
         self.edits_allowed = edits_allowed
 
     def to_dict(self) -> ExplorationMetadataDict:
@@ -7106,7 +7064,6 @@ class ExplorationMetadata:
             'param_changes': [
                 p_change.to_dict() for p_change in self.param_changes
             ],
-            'auto_tts_enabled': self.auto_tts_enabled,
             'edits_allowed': self.edits_allowed,
         }
 

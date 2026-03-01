@@ -2284,7 +2284,6 @@ class ExplorationYamlImportingTests(test_utils.GenericTestBase):
             (
                 """
         author_notes: ''
-        auto_tts_enabled: true
         blurb: ''
         category: Category
         edits_allowed: true
@@ -2758,7 +2757,6 @@ class ZipFileExportUnitTests(ExplorationServicesUnitTests):
     )
     SAMPLE_YAML_CONTENT: str = (
         """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: Algebra
 edits_allowed: true
@@ -2856,7 +2854,6 @@ version: 2
     )
 
     UPDATED_YAML_CONTENT = """author_notes: ''
-auto_tts_enabled: false
 blurb: ''
 category: Algebra
 edits_allowed: true
@@ -7721,7 +7718,6 @@ class ExplorationConversionPipelineTests(ExplorationServicesUnitTests):
     UPGRADED_EXP_YAML: Final = (
         (
             """author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: category
 edits_allowed: true
@@ -8495,70 +8491,6 @@ title: Old Title
         self.assertEqual(
             exploration.init_state_name, feconf.DEFAULT_INIT_STATE_NAME
         )
-
-    def test_update_exploration_auto_tts_enabled(self) -> None:
-        exploration = exp_fetchers.get_exploration_by_id(self.NEW_EXP_ID)
-        self.assertEqual(exploration.auto_tts_enabled, False)
-        exp_services.update_exploration(
-            self.albert_id,
-            self.NEW_EXP_ID,
-            [
-                exp_domain.ExplorationChange(
-                    {
-                        'cmd': exp_domain.CMD_EDIT_EXPLORATION_PROPERTY,
-                        'property_name': 'auto_tts_enabled',
-                        'new_value': False,
-                    }
-                )
-            ],
-            'Changed auto_tts_enabled.',
-        )
-
-        exploration = exp_fetchers.get_exploration_by_id(self.NEW_EXP_ID)
-        self.assertEqual(exploration.auto_tts_enabled, False)
-
-        # Check that the property can be changed when working
-        # on old version.
-        # Add change to upgrade the version.
-        exp_services.update_exploration(
-            self.albert_id,
-            self.NEW_EXP_ID,
-            [
-                exp_domain.ExplorationChange(
-                    {
-                        'cmd': exp_domain.CMD_EDIT_EXPLORATION_PROPERTY,
-                        'property_name': 'title',
-                        'new_value': 'new title',
-                    }
-                )
-            ],
-            'Changed title.',
-        )
-
-        change_list = [
-            exp_domain.ExplorationChange(
-                {
-                    'cmd': exp_domain.CMD_EDIT_EXPLORATION_PROPERTY,
-                    'property_name': 'auto_tts_enabled',
-                    'new_value': True,
-                }
-            )
-        ]
-        changes_are_mergeable = exp_services.are_changes_mergeable(
-            self.NEW_EXP_ID, 2, change_list
-        )
-        self.assertTrue(changes_are_mergeable)
-        exp_services.update_exploration(
-            self.albert_id,
-            self.NEW_EXP_ID,
-            change_list,
-            'Changed auto_tts_enabled again.',
-        )
-
-        # Assert that final version consists all the changes.
-        exploration = exp_fetchers.get_exploration_by_id(self.NEW_EXP_ID)
-        self.assertEqual(exploration.title, 'new title')
-        self.assertEqual(exploration.auto_tts_enabled, True)
 
     def test_update_old_exploration_version_remains_editable(self) -> None:
         exploration = exp_fetchers.get_exploration_by_id(self.NEW_EXP_ID)
@@ -11218,7 +11150,6 @@ class LoggedOutUserProgressUpdateTests(test_utils.GenericTestBase):
     SAMPLE_EXPLORATION_YAML: str = (
         """
 author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -11611,7 +11542,6 @@ class SyncLoggedInAndLoggedOutProgressTests(test_utils.GenericTestBase):
     SAMPLE_EXPLORATION_YAML: str = (
         """
 author_notes: ''
-auto_tts_enabled: true
 blurb: ''
 category: Category
 edits_allowed: true
@@ -12943,7 +12873,6 @@ class ExplorationInOldSchemaFormatTests(test_utils.GenericTestBase):
             'param_changes': [],
             'param_specs': {},
             'tags': [],
-            'auto_tts_enabled': False,
             'next_content_id_index': 2,
             'edits_allowed': True,
             'states': {

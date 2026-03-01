@@ -542,16 +542,6 @@ class DraftUpgradeUtilUnitTests(test_utils.GenericTestBase):
             )
         ]
 
-        draft_change_list_v52_5 = [
-            exp_domain.ExplorationChange(
-                {
-                    'cmd': exp_domain.CMD_EDIT_EXPLORATION_PROPERTY,
-                    'property_name': 'auto_tts_enabled',
-                    'new_value': True,
-                }
-            )
-        ]
-
         draft_change_list_v52_6 = [
             exp_domain.ExplorationChange(
                 {
@@ -622,17 +612,6 @@ class DraftUpgradeUtilUnitTests(test_utils.GenericTestBase):
         self.assertEqual(
             [change.to_dict() for change in draft_change_list_v52_4],
             [change.to_dict() for change in migrated_draft_change_list_v53_4],
-        )
-
-        migrated_draft_change_list_v53_5 = (
-            draft_upgrade_services.try_upgrading_draft_to_exp_version(
-                draft_change_list_v52_5, 1, 2, self.EXP_ID
-            )
-        )
-        assert migrated_draft_change_list_v53_5 is not None
-        self.assertEqual(
-            [change.to_dict() for change in draft_change_list_v52_5],
-            [change.to_dict() for change in migrated_draft_change_list_v53_5],
         )
 
         migrated_draft_change_list_v53_6 = (

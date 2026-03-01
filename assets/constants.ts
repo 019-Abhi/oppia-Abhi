@@ -7768,8 +7768,7 @@ export default {
   "METADATA_PROPERTIES": [
     "title", "category", "objective", "language_code", "tags", "blurb",
     "author_notes", "states_schema_version", "init_state_name", "param_specs",
-    "param_changes", "auto_tts_enabled",
-    "edits_allowed"
+    "param_changes", "edits_allowed"
   ],
   "NON_METADATA_PROPERTIES": [
     "id", "states", "next_content_id_index", "version"

@@ -168,7 +168,6 @@ describe('Settings Tab Component', () => {
                   init_state_name: 'Introduction',
                   param_specs: {},
                   param_changes: [],
-                  auto_tts_enabled: false,
                   edits_allowed: true,
                 },
               }),
